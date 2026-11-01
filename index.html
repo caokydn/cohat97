@@ -1,0 +1,3321 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, user-scalable=no"
+>
+
+<title>JUNI English - Whack a Mole</title>
+
+
+<style>
+
+/* =====================================================
+   RESET
+===================================================== */
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+
+/* =====================================================
+   BODY
+===================================================== */
+
+body{
+
+    font-family:"Comic Sans MS", sans-serif;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fcd5ce,
+            #fef9c3
+        );
+
+    overflow-x:hidden;
+
+    min-height:100vh;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:flex-start;
+}
+
+
+/* =====================================================
+   BRAND
+===================================================== */
+
+#brand{
+
+    width:100%;
+
+    text-align:center;
+
+    font-size:1.5em;
+
+    color:#6b5b95;
+
+    background:
+        linear-gradient(
+            90deg,
+            #fcd5ce,
+            #fef9c3
+        );
+
+    padding:8px 5px;
+
+    font-weight:bold;
+
+    position:sticky;
+
+    top:0;
+
+    z-index:20;
+
+    box-shadow:
+        0 2px 5px rgba(0,0,0,0.2);
+}
+
+
+/* =====================================================
+   VOLUME
+===================================================== */
+
+#volumeControl{
+
+    margin:7px 0;
+
+    text-align:center;
+
+    font-size:17px;
+}
+
+
+#volumeControl input{
+
+    vertical-align:middle;
+}
+
+
+/* =====================================================
+   WELCOME
+===================================================== */
+
+#welcomeScreen{
+
+    position:fixed;
+
+    top:0;
+    left:0;
+
+    width:100%;
+    height:100%;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    flex-direction:column;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fcd34d,
+            #fbbf24
+        );
+
+    z-index:100;
+}
+
+
+#welcomeScreen h2{
+
+    font-size:3em;
+
+    color:#f472b6;
+
+    margin-bottom:20px;
+
+    text-align:center;
+
+    padding:0 15px;
+}
+
+
+#welcomeScreen input{
+
+    padding:12px;
+
+    font-size:20px;
+
+    border-radius:12px;
+
+    border:2px solid #ccc;
+
+    margin-bottom:20px;
+
+    width:250px;
+
+    text-align:center;
+}
+
+
+/* =====================================================
+   LOADING STATUS
+===================================================== */
+
+#loadingStatus{
+
+    width:280px;
+
+    text-align:center;
+
+    font-size:18px;
+
+    font-weight:bold;
+
+    color:#1f2937;
+
+    margin-bottom:15px;
+
+    min-height:27px;
+}
+
+
+#loadingBar{
+
+    width:280px;
+
+    height:12px;
+
+    background:
+        rgba(255,255,255,0.6);
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    margin-bottom:20px;
+
+    box-shadow:
+        inset 0 1px 3px rgba(0,0,0,0.2);
+}
+
+
+#loadingProgress{
+
+    width:0%;
+
+    height:100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            #22c55e,
+            #16a34a
+        );
+
+    border-radius:20px;
+
+    transition:
+        width 0.2s ease;
+}
+
+
+/* =====================================================
+   START BUTTON
+===================================================== */
+
+#welcomeScreen button{
+
+    padding:15px 40px;
+
+    font-size:20px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #38bdf8,
+            #0ea5e9
+        );
+
+    color:#0f172a;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    box-shadow:
+        0 5px 15px rgba(0,0,0,0.3);
+
+    transition:0.3s;
+}
+
+
+#welcomeScreen button:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:
+        0 8px 20px rgba(0,0,0,0.4);
+}
+
+
+/* =====================================================
+   DISABLED START BUTTON
+===================================================== */
+
+#welcomeScreen button:disabled{
+
+    background:#9ca3af;
+
+    color:#e5e7eb;
+
+    cursor:not-allowed;
+
+    transform:none;
+
+    box-shadow:
+        0 3px 8px rgba(0,0,0,0.2);
+
+}
+
+
+/* =====================================================
+   GAME AREA
+===================================================== */
+
+#gameArea{
+
+    display:none;
+
+    width:96%;
+
+    max-width:650px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #FF69B4,
+            #8A2BE2
+        );
+
+    border-radius:20px;
+
+    padding:12px;
+
+    box-shadow:
+        0 4px 12px rgba(0,0,0,0.3);
+
+    color:#1f2937;
+
+    text-align:center;
+
+    margin-top:10px;
+
+    max-height:
+        calc(100vh - 90px);
+}
+
+
+/* =====================================================
+   SCORE
+===================================================== */
+
+#scoreBoard{
+
+    font-size:25px;
+
+    color:#fff;
+
+    margin-bottom:5px;
+
+    font-weight:bold;
+}
+
+
+/* =====================================================
+   TARGET WORD
+===================================================== */
+
+#targetArea{
+
+    width:100%;
+
+    margin-bottom:5px;
+}
+
+
+#targetWord{
+
+    display:inline-block;
+
+    min-width:150px;
+
+    padding:4px 18px;
+
+    background:white;
+
+    color:#111827;
+
+    border-radius:12px;
+
+    font-size:27px;
+
+    font-weight:bold;
+
+    border:3px solid #facc15;
+
+    box-shadow:
+        0 3px 8px rgba(0,0,0,0.3);
+}
+
+
+/* =====================================================
+   TIMER
+===================================================== */
+
+#timerBar{
+
+    width:100%;
+
+    height:7px;
+
+    background:
+        rgba(255,255,255,0.35);
+
+    border-radius:10px;
+
+    overflow:hidden;
+
+    margin-top:5px;
+}
+
+
+#timerProgress{
+
+    height:100%;
+
+    width:100%;
+
+    background:#22c55e;
+
+    transform-origin:left;
+}
+
+
+/* =====================================================
+   GAME BOARD 3 x 3
+===================================================== */
+
+#gameBoard{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,minmax(0,1fr));
+
+    gap:8px;
+
+    width:100%;
+
+    max-width:580px;
+
+    margin:auto;
+
+    padding:5px;
+}
+
+
+/* =====================================================
+   HOLE
+===================================================== */
+
+.hole{
+
+    position:relative;
+
+    width:100%;
+
+    aspect-ratio:1 / 1;
+
+    overflow:hidden;
+
+    cursor:pointer;
+
+    touch-action:manipulation;
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            #111 0%,
+            #292929 45%,
+            #555 70%,
+            #222 100%
+        );
+
+    border-radius:
+        50% 50% 45% 45%;
+
+    box-shadow:
+
+        inset
+        0 6px 12px
+        rgba(0,0,0,0.7),
+
+        0 4px 4px
+        rgba(0,0,0,0.3);
+}
+
+
+/* =====================================================
+   ĐẤT
+===================================================== */
+
+.hole::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:-5%;
+
+    bottom:-15%;
+
+    width:110%;
+
+    height:35%;
+
+    background:
+        linear-gradient(
+            #a16207,
+            #78350f
+        );
+
+    border-radius:
+        50% 50% 0 0;
+
+    z-index:2;
+}
+
+
+/* =====================================================
+   MOLE
+===================================================== */
+
+.mole{
+
+    position:absolute;
+
+    left:50%;
+
+    bottom:-100%;
+
+    width:88%;
+
+    height:94%;
+
+    transform:
+        translateX(-50%);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    transition:
+        bottom 0.16s ease-out;
+
+    z-index:3;
+}
+
+
+/* =====================================================
+   ACTIVE
+===================================================== */
+
+.hole.active .mole{
+
+    bottom:3%;
+}
+
+
+/* =====================================================
+   MOLE IMAGE
+===================================================== */
+
+.mole img{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:contain;
+
+    display:block;
+
+    border-radius:12px;
+
+    border:3px solid #ffcc00;
+
+    background:white;
+
+    box-shadow:
+        0 3px 8px rgba(0,0,0,0.4);
+}
+
+
+/* =====================================================
+   HIT
+===================================================== */
+
+.hole.hit .mole{
+
+    animation:
+        moleHit 0.22s ease forwards;
+}
+
+
+@keyframes moleHit{
+
+    0%{
+
+        transform:
+            translateX(-50%)
+            scale(1);
+
+    }
+
+    40%{
+
+        transform:
+            translateX(-50%)
+            scale(1.15)
+            rotate(-8deg);
+
+    }
+
+    100%{
+
+        transform:
+            translateX(-50%)
+            scale(0);
+
+    }
+
+}
+
+
+/* =====================================================
+   HAMMER
+===================================================== */
+
+#hammer{
+
+    position:fixed;
+
+    display:none;
+
+    pointer-events:none;
+
+    z-index:500;
+
+    font-size:60px;
+
+    transform:
+        rotate(-35deg);
+}
+
+
+#hammer.hit{
+
+    display:block;
+
+    animation:
+        hammerHit 0.22s ease;
+}
+
+
+@keyframes hammerHit{
+
+    0%{
+
+        transform:
+            rotate(-45deg)
+            scale(1);
+
+    }
+
+    50%{
+
+        transform:
+            rotate(15deg)
+            scale(1.25);
+
+    }
+
+    100%{
+
+        transform:
+            rotate(-35deg)
+            scale(1);
+
+    }
+
+}
+
+
+/* =====================================================
+   MESSAGE
+===================================================== */
+
+#message{
+
+    min-height:27px;
+
+    margin-top:2px;
+
+    font-size:20px;
+
+    font-weight:bold;
+
+    color:white;
+}
+
+
+/* =====================================================
+   END SCREEN
+===================================================== */
+
+#endScreen{
+
+    display:none;
+
+    width:95%;
+
+    max-width:700px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #a5b4fc,
+            #c7d2fe
+        );
+
+    border-radius:20px;
+
+    padding:30px 20px;
+
+    text-align:center;
+
+    color:#1f2937;
+
+    margin-top:30px;
+}
+
+
+#endScreen .line1{
+
+    font-size:2.2em;
+
+    color:#f472b6;
+
+    margin-bottom:8px;
+}
+
+
+#endScreen .line2{
+
+    font-size:1.8em;
+
+    margin-bottom:8px;
+
+    font-weight:bold;
+}
+
+
+#endScreen .line3{
+
+    font-size:1.6em;
+
+    color:#34d399;
+
+    margin-bottom:12px;
+}
+
+
+#playAgainBtn{
+
+    padding:12px 30px;
+
+    font-size:18px;
+
+    border-radius:12px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #38bdf8,
+            #0ea5e9
+        );
+
+    color:#0f172a;
+
+    border:none;
+
+    cursor:pointer;
+
+    font-weight:bold;
+}
+
+
+/* =====================================================
+   BALLOON
+===================================================== */
+
+#balloonCanvas{
+
+    position:fixed;
+
+    top:0;
+    left:0;
+
+    pointer-events:none;
+
+    z-index:300;
+
+    width:100%;
+    height:100%;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width:600px){
+
+    #brand{
+
+        font-size:0.95em;
+
+        padding:6px 3px;
+    }
+
+
+    #volumeControl{
+
+        font-size:14px;
+
+        margin:4px 0;
+    }
+
+
+    #volumeControl input{
+
+        width:120px !important;
+    }
+
+
+    #gameArea{
+
+        width:98%;
+
+        padding:7px;
+
+        margin-top:5px;
+
+        border-radius:15px;
+    }
+
+
+    #scoreBoard{
+
+        font-size:21px;
+    }
+
+
+    #targetWord{
+
+        font-size:23px;
+
+        min-width:125px;
+
+        padding:3px 12px;
+    }
+
+
+    #timerBar{
+
+        height:6px;
+    }
+
+
+    #gameBoard{
+
+        gap:5px;
+
+        padding:3px;
+    }
+
+
+    .mole img{
+
+        border-width:2px;
+
+        border-radius:9px;
+    }
+
+
+    #message{
+
+        font-size:17px;
+
+        min-height:22px;
+    }
+
+
+    #hammer{
+
+        font-size:50px;
+    }
+
+
+    #welcomeScreen h2{
+
+        font-size:2em;
+    }
+
+
+    #welcomeScreen input{
+
+        width:70%;
+    }
+
+
+    #loadingStatus{
+
+        width:70%;
+
+        font-size:16px;
+    }
+
+
+    #loadingBar{
+
+        width:70%;
+    }
+
+}
+
+
+@media(max-width:380px){
+
+    #brand{
+
+        font-size:0.82em;
+    }
+
+
+    #volumeControl{
+
+        display:none;
+    }
+
+
+    #gameArea{
+
+        margin-top:3px;
+
+        padding:5px;
+    }
+
+
+    #scoreBoard{
+
+        font-size:19px;
+    }
+
+
+    #targetWord{
+
+        font-size:20px;
+
+        min-width:110px;
+    }
+
+
+    #gameBoard{
+
+        gap:4px;
+
+        padding:2px;
+    }
+
+
+    #message{
+
+        font-size:15px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     BRAND
+===================================================== -->
+
+<div id="brand">
+
+🎉 JUNI English - 113 Lê Trọng Tấn, Đà Nẵng - 0935.994359 🎉
+
+</div>
+
+
+<!-- =====================================================
+     BACKGROUND MUSIC
+===================================================== -->
+
+<audio
+    id="bg-music"
+    src="sound/background music.mp3"
+    loop>
+</audio>
+
+
+<div id="volumeControl">
+
+🔊 Âm lượng nhạc nền:
+
+<input
+    type="range"
+    id="bgVolume"
+    min="0"
+    max="1"
+    step="0.01"
+    value="0"
+    style="width:200px;"
+>
+
+</div>
+
+
+<!-- =====================================================
+     WELCOME
+===================================================== -->
+
+<div id="welcomeScreen">
+
+    <h2>
+        🎉 JUNI English chào mừng các em 🎉
+    </h2>
+
+
+    <input
+        type="text"
+        id="studentName"
+        placeholder="Nhập tên em..."
+    >
+
+
+    <!-- =================================================
+         LOADING
+    ================================================= -->
+
+    <div id="loadingStatus">
+        🖼️ Đang chuẩn bị hình ảnh và âm thanh...
+    </div>
+
+
+    <div id="loadingBar">
+
+        <div id="loadingProgress"></div>
+
+    </div>
+
+
+    <button
+        id="startBtn"
+        disabled
+    >
+        ⏳ Đang tải...
+    </button>
+
+</div>
+
+
+<!-- =====================================================
+   GAME
+===================================================== -->
+
+<div id="gameArea">
+
+
+    <div id="scoreBoard">
+        Điểm: 0 / 14
+    </div>
+
+
+    <div id="targetArea">
+
+        <div id="targetWord">
+            ...
+        </div>
+
+
+        <div id="timerBar">
+
+            <div id="timerProgress"></div>
+
+        </div>
+
+    </div>
+
+
+    <div id="gameBoard"></div>
+
+
+    <div id="message">
+        🐭 Đập chuột nào!
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+   END SCREEN
+===================================================== -->
+
+<div id="endScreen">
+
+    <div class="line1">
+        🎉 JUNI English chúc mừng 🎉
+    </div>
+
+
+    <div
+        class="line2"
+        id="endName">
+    </div>
+
+
+    <div
+        class="line3"
+        id="endScore">
+    </div>
+
+
+    <button id="playAgainBtn">
+        🔄 Chơi lại
+    </button>
+
+</div>
+
+
+<!-- HAMMER -->
+
+<div id="hammer">
+    🔨
+</div>
+
+
+<!-- BALLOON -->
+
+<canvas id="balloonCanvas"></canvas>
+
+
+<script>
+
+
+/* =====================================================
+   DANH SÁCH TỪ VỰNG
+===================================================== */
+
+const juniorword = ['bạn thân','con chồn','cún con','củ sâm','khăn rằn','ngọn nến','nón lá','quả cam','quả mận','sơn ca','tăm tre','đèn pin'];
+
+
+/* =====================================================
+   FOLDER
+===================================================== */
+
+const IMAGE_FOLDER =
+    "flashcard/";
+
+
+const RECORDING_FOLDER =
+    "recording/";
+
+
+/* =====================================================
+   CẤU HÌNH
+===================================================== */
+
+const HIT_TIME =
+    3000;
+
+
+const MOLE_COUNT =
+    3;
+
+
+const TOTAL_ROUNDS =
+    juniorword.length;
+
+
+/* =====================================================
+   GAME VARIABLES
+===================================================== */
+
+let remainingWords = [];
+
+let score = 0;
+
+let currentRound = 0;
+
+let currentTarget = "";
+
+let gameRunning = false;
+
+let activeHoles = new Set();
+
+let holeWords = {};
+
+let roundTimer = null;
+
+let timerAnimation = null;
+
+let wordAudio = null;
+
+
+/*
+    QUAN TRỌNG:
+
+    Mỗi round chỉ được phép đập
+    đúng 1 lần.
+
+    Đúng  -> kết thúc round.
+    Sai   -> kết thúc round.
+*/
+
+let roundFinished = false;
+
+
+/* =====================================================
+   STUDENT
+===================================================== */
+
+let studentName = "";
+
+
+/* =====================================================
+   DOM
+===================================================== */
+
+const welcomeScreen =
+    document.getElementById(
+        "welcomeScreen"
+    );
+
+
+const startBtn =
+    document.getElementById(
+        "startBtn"
+    );
+
+
+const nameInput =
+    document.getElementById(
+        "studentName"
+    );
+
+
+const loadingStatus =
+    document.getElementById(
+        "loadingStatus"
+    );
+
+
+const loadingProgress =
+    document.getElementById(
+        "loadingProgress"
+    );
+
+
+const gameArea =
+    document.getElementById(
+        "gameArea"
+    );
+
+
+const gameBoard =
+    document.getElementById(
+        "gameBoard"
+    );
+
+
+const scoreBoard =
+    document.getElementById(
+        "scoreBoard"
+    );
+
+
+const targetWordEl =
+    document.getElementById(
+        "targetWord"
+    );
+
+
+const timerProgress =
+    document.getElementById(
+        "timerProgress"
+    );
+
+
+const messageEl =
+    document.getElementById(
+        "message"
+    );
+
+
+const endScreen =
+    document.getElementById(
+        "endScreen"
+    );
+
+
+const endName =
+    document.getElementById(
+        "endName"
+    );
+
+
+const endScore =
+    document.getElementById(
+        "endScore"
+    );
+
+
+const playAgainBtn =
+    document.getElementById(
+        "playAgainBtn"
+    );
+
+
+const hammer =
+    document.getElementById(
+        "hammer"
+    );
+
+
+/* =====================================================
+   BACKGROUND MUSIC
+===================================================== */
+
+const bgMusic =
+    document.getElementById(
+        "bg-music"
+    );
+
+
+/*
+    Âm lượng mặc định = 0.
+*/
+
+bgMusic.volume = 0;
+
+
+/*
+    Khi người dùng click lần đầu,
+    trình duyệt cho phép audio phát.
+
+    Tuy nhiên volume vẫn giữ 0.
+*/
+
+document.body.addEventListener(
+    "click",
+    () => {
+
+        bgMusic.volume =
+            Number(
+                document.getElementById(
+                    "bgVolume"
+                ).value
+            );
+
+        bgMusic.play().catch(
+            () => {}
+        );
+
+    },
+    {
+        once:true
+    }
+);
+
+
+/*
+    Điều chỉnh âm lượng.
+*/
+
+document
+    .getElementById("bgVolume")
+    .addEventListener(
+        "input",
+        function(){
+
+            bgMusic.volume =
+                Number(
+                    this.value
+                );
+
+
+            if(
+                Number(this.value) > 0
+            ){
+
+                bgMusic.play().catch(
+                    () => {}
+                );
+
+            }
+
+        }
+    );
+
+
+/* =====================================================
+   PRELOAD IMAGES
+===================================================== */
+
+
+/*
+    Lưu đường dẫn ảnh đã tìm thấy.
+*/
+
+const imageSources = {};
+
+
+/*
+    Tải một ảnh.
+
+    Thử lần lượt:
+
+    PNG
+    JPG
+    JPEG
+*/
+
+function preloadOneImage(word){
+
+    return new Promise(
+        resolve => {
+
+            const extensions = [
+
+                "png",
+                "jpg",
+                "jpeg"
+
+            ];
+
+
+            let currentIndex = 0;
+
+
+            function tryNext(){
+
+                if(
+                    currentIndex >=
+                    extensions.length
+                ){
+
+                    resolve(false);
+
+                    return;
+
+                }
+
+
+                const extension =
+                    extensions[
+                        currentIndex
+                    ];
+
+
+                const src =
+                    IMAGE_FOLDER +
+                    word +
+                    "." +
+                    extension;
+
+
+                const img =
+                    new Image();
+
+
+                img.onload =
+                    function(){
+
+                        imgSources[word] =
+                            img;
+
+
+                        imageSources[word] =
+                            src;
+
+
+                        resolve(true);
+
+                    };
+
+
+                img.onerror =
+                    function(){
+
+                        currentIndex++;
+
+                        tryNext();
+
+                    };
+
+
+                img.src =
+                    src;
+
+            }
+
+
+            tryNext();
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   IMAGE CACHE
+===================================================== */
+
+const imgSources = {};
+
+
+/* =====================================================
+   AUDIO CACHE
+===================================================== */
+
+
+/*
+    Lưu Audio object đã preload.
+
+    Ví dụ:
+
+    audioSources["doctor"]
+
+    sẽ chứa file:
+
+    recording/doctor.mp3
+*/
+
+const audioSources = {};
+
+
+/*
+    Tải trước một file MP3.
+
+    Chỉ cần tải đúng file .mp3.
+*/
+
+function preloadOneAudio(word){
+
+    return new Promise(
+        resolve => {
+
+            const audio =
+                new Audio();
+
+
+            audio.preload =
+                "auto";
+
+
+            audio.oncanplaythrough =
+                function(){
+
+                    audioSources[word] =
+                        audio;
+
+
+                    resolve(true);
+
+                };
+
+
+            audio.onerror =
+                function(){
+
+                    resolve(false);
+
+                };
+
+
+            audio.src =
+                RECORDING_FOLDER +
+                word +
+                ".mp3";
+
+
+            audio.load();
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   PRELOAD IMAGES + AUDIO
+===================================================== */
+
+
+/*
+    Tải toàn bộ:
+
+    14 hình ảnh
+    +
+    14 recording
+
+    Tổng cộng 28 tài nguyên.
+
+    Loading bar chạy theo tổng số
+    tài nguyên đã hoàn thành.
+*/
+
+async function preloadAllAssets(){
+
+    const totalImages =
+        juniorword.length;
+
+
+    const totalAudio =
+        juniorword.length;
+
+
+    const totalAssets =
+        totalImages +
+        totalAudio;
+
+
+    let completed =
+        0;
+
+
+    let loadedImages =
+        0;
+
+
+    let loadedAudio =
+        0;
+
+
+    loadingStatus.textContent =
+        `🖼️🔊 Đang tải... 0/${totalAssets}`;
+
+
+    loadingProgress.style.width =
+        "0%";
+
+
+    /*
+        -------------------------------------------------
+        PRELOAD IMAGES
+        -------------------------------------------------
+    */
+
+    const imagePromises =
+        juniorword.map(
+            async word => {
+
+                const result =
+                    await preloadOneImage(
+                        word
+                    );
+
+
+                if(result){
+
+                    loadedImages++;
+
+                }
+
+
+                completed++;
+
+
+                const percent =
+                    completed /
+                    totalAssets *
+                    100;
+
+
+                loadingProgress.style.width =
+                    percent + "%";
+
+
+                loadingStatus.textContent =
+                    `🖼️🔊 Đang tải... ${completed}/${totalAssets}`;
+
+
+                return result;
+
+            }
+        );
+
+
+    /*
+        -------------------------------------------------
+        PRELOAD AUDIO
+        -------------------------------------------------
+    */
+
+    const audioPromises =
+        juniorword.map(
+            async word => {
+
+                const result =
+                    await preloadOneAudio(
+                        word
+                    );
+
+
+                if(result){
+
+                    loadedAudio++;
+
+                }
+
+
+                completed++;
+
+
+                const percent =
+                    completed /
+                    totalAssets *
+                    100;
+
+
+                loadingProgress.style.width =
+                    percent + "%";
+
+
+                loadingStatus.textContent =
+                    `🖼️🔊 Đang tải... ${completed}/${totalAssets}`;
+
+
+                return result;
+
+            }
+        );
+
+
+    /*
+        Chờ cả ảnh và audio.
+    */
+
+    const imageResults =
+        await Promise.all(
+            imagePromises
+        );
+
+
+    const audioResults =
+        await Promise.all(
+            audioPromises
+        );
+
+
+    /*
+        -------------------------------------------------
+        KIỂM TRA
+        -------------------------------------------------
+    */
+
+    if(
+        loadedImages === totalImages &&
+        loadedAudio === totalAudio
+    ){
+
+        loadingProgress.style.width =
+            "100%";
+
+
+        loadingStatus.textContent =
+            `✅ Đã tải xong ${totalImages} hình ảnh + ${totalAudio} âm thanh!`;
+
+
+        startBtn.disabled =
+            false;
+
+
+        startBtn.textContent =
+            "🔨 Bắt đầu";
+
+    }
+
+    else{
+
+        loadingStatus.textContent =
+            `⚠️ Hình ảnh: ${loadedImages}/${totalImages} | Âm thanh: ${loadedAudio}/${totalAudio}`;
+
+
+        startBtn.disabled =
+            true;
+
+
+        startBtn.textContent =
+            "⚠️ Thiếu dữ liệu";
+
+    }
+
+}
+
+
+/* =====================================================
+   SHUFFLE
+===================================================== */
+
+function shuffle(arr){
+
+    for(
+        let i = arr.length - 1;
+        i > 0;
+        i--
+    ){
+
+        const j =
+            Math.floor(
+                Math.random() *
+                (i + 1)
+            );
+
+
+        [
+            arr[i],
+            arr[j]
+        ] =
+        [
+            arr[j],
+            arr[i]
+        ];
+
+    }
+
+
+    return arr;
+
+}
+
+
+/* =====================================================
+   CREATE BOARD
+===================================================== */
+
+function createBoard(){
+
+    gameBoard.innerHTML = "";
+
+    activeHoles.clear();
+
+    holeWords = {};
+
+
+    for(
+        let i = 0;
+        i < 9;
+        i++
+    ){
+
+        const hole =
+            document.createElement(
+                "div"
+            );
+
+
+        hole.className =
+            "hole";
+
+
+        hole.dataset.index =
+            i;
+
+
+        hole.dataset.hit =
+            "false";
+
+
+        hole.addEventListener(
+            "pointerdown",
+            hitMole
+        );
+
+
+        const mole =
+            document.createElement(
+                "div"
+            );
+
+
+        mole.className =
+            "mole";
+
+
+        hole.appendChild(
+            mole
+        );
+
+
+        gameBoard.appendChild(
+            hole
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   RANDOM WORD
+===================================================== */
+
+function randomWord(){
+
+    return juniorword[
+        Math.floor(
+            Math.random() *
+            juniorword.length
+        )
+    ];
+
+}
+
+
+/* =====================================================
+   PLAY VOCABULARY RECORDING
+===================================================== */
+
+function playWordAudio(word){
+
+    if(wordAudio){
+
+        wordAudio.pause();
+
+        wordAudio.currentTime =
+            0;
+
+    }
+
+
+    /*
+        Lấy Audio object đã preload.
+
+        Không tạo request mới.
+    */
+
+    const cachedAudio =
+        audioSources[word];
+
+
+    if(cachedAudio){
+
+        wordAudio =
+            cachedAudio;
+
+        wordAudio.currentTime =
+            0;
+
+    }
+
+    else{
+
+        /*
+            Fallback nếu preload thất bại.
+        */
+
+        wordAudio =
+            new Audio(
+                RECORDING_FOLDER +
+                word +
+                ".mp3"
+            );
+
+        wordAudio.preload =
+            "auto";
+
+    }
+
+
+    wordAudio.play().catch(
+        () => {}
+    );
+
+
+    return wordAudio;
+
+}
+
+
+/* =====================================================
+   CREATE ROUND
+===================================================== */
+
+function createRound(){
+
+    if(!gameRunning)
+        return;
+
+
+    /*
+        Hết từ -> kết thúc.
+    */
+
+    if(
+        remainingWords.length === 0
+    ){
+
+        endGame();
+
+        return;
+
+    }
+
+
+    /*
+        Reset trạng thái round.
+    */
+
+    roundFinished =
+        false;
+
+
+    /*
+        Xóa tất cả chuột cũ.
+    */
+
+    for(
+        let i = 0;
+        i < 9;
+        i++
+    ){
+
+        hideMole(i);
+
+    }
+
+
+    activeHoles.clear();
+
+    holeWords = {};
+
+
+    /*
+        Lấy từ tiếp theo.
+    */
+
+    currentTarget =
+        remainingWords.shift();
+
+
+    targetWordEl.textContent =
+        currentTarget;
+
+
+    messageEl.textContent =
+        "🐭 Đập chuột nào!";
+
+
+    messageEl.style.color =
+        "white";
+
+
+    /*
+        Phát recording đã preload.
+    */
+
+    playWordAudio(
+        currentTarget
+    );
+
+
+    /*
+        Tạo 3 vị trí khác nhau.
+    */
+
+    const positions =
+        shuffle(
+            [0,1,2,3,4,5,6,7,8]
+        ).slice(
+            0,
+            MOLE_COUNT
+        );
+
+
+    /*
+        Chọn vị trí đúng.
+    */
+
+    const correctPosition =
+        positions[
+            Math.floor(
+                Math.random() *
+                positions.length
+            )
+        ];
+
+
+    const usedWords =
+        new Set();
+
+
+    usedWords.add(
+        currentTarget
+    );
+
+
+    positions.forEach(
+        index => {
+
+            let word;
+
+
+            /*
+                Chuột đúng.
+            */
+
+            if(
+                index === correctPosition
+            ){
+
+                word =
+                    currentTarget;
+
+            }
+
+
+            /*
+                Chuột sai.
+            */
+
+            else{
+
+                do{
+
+                    word =
+                        randomWord();
+
+                }
+                while(
+                    usedWords.has(word)
+                );
+
+            }
+
+
+            usedWords.add(
+                word
+            );
+
+
+            showMole(
+                index,
+                word
+            );
+
+        }
+    );
+
+
+    /*
+        Bắt đầu timer.
+    */
+
+    startHitTimer();
+
+}
+
+
+/* =====================================================
+   SHOW MOLE
+===================================================== */
+
+function showMole(
+    index,
+    word
+){
+
+    const hole =
+        gameBoard.children[index];
+
+
+    if(!hole)
+        return;
+
+
+    const mole =
+        hole.querySelector(
+            ".mole"
+        );
+
+
+    activeHoles.add(
+        index
+    );
+
+
+    holeWords[index] =
+        word;
+
+
+    hole.dataset.hit =
+        "false";
+
+
+    /*
+        Lấy Image object đã preload.
+    */
+
+    const cachedImage =
+        imgSources[word];
+
+
+    if(
+        cachedImage
+    ){
+
+        const img =
+            cachedImage.cloneNode(
+                true
+            );
+
+
+        img.alt =
+            word;
+
+
+        img.draggable =
+            false;
+
+
+        mole.innerHTML = "";
+
+
+        mole.appendChild(
+            img
+        );
+
+    }
+
+    else{
+
+        const imageSrc =
+            imageSources[word];
+
+
+        mole.innerHTML = `
+
+            <img
+                src="${imageSrc}"
+                alt="${word}"
+                draggable="false"
+            >
+
+        `;
+
+    }
+
+
+    hole.classList.add(
+        "active"
+    );
+
+}
+
+
+/* =====================================================
+   HIDE MOLE
+===================================================== */
+
+function hideMole(index){
+
+    const hole =
+        gameBoard.children[index];
+
+
+    if(!hole)
+        return;
+
+
+    hole.classList.remove(
+        "active"
+    );
+
+
+    hole.classList.remove(
+        "hit"
+    );
+
+
+    hole.dataset.hit =
+        "false";
+
+
+    activeHoles.delete(
+        index
+    );
+
+
+    delete holeWords[index];
+
+}
+
+
+/* =====================================================
+   HIT TIMER
+===================================================== */
+
+function startHitTimer(){
+
+    clearTimeout(
+        roundTimer
+    );
+
+
+    cancelAnimationFrame(
+        timerAnimation
+    );
+
+
+    timerProgress.style.width =
+        "100%";
+
+
+    const startTime =
+        performance.now();
+
+
+    function animate(now){
+
+        if(!gameRunning)
+            return;
+
+
+        const elapsed =
+            now - startTime;
+
+
+        const remaining =
+            Math.max(
+                0,
+                HIT_TIME - elapsed
+            );
+
+
+        const percent =
+            remaining /
+            HIT_TIME *
+            100;
+
+
+        timerProgress.style.width =
+            percent + "%";
+
+
+        if(
+            remaining > 0
+        ){
+
+            timerAnimation =
+                requestAnimationFrame(
+                    animate
+                );
+
+        }
+
+    }
+
+
+    timerAnimation =
+        requestAnimationFrame(
+            animate
+        );
+
+
+    roundTimer =
+        setTimeout(
+            hitTimeUp,
+            HIT_TIME
+        );
+
+}
+
+
+/* =====================================================
+   HẾT GIỜ
+===================================================== */
+
+function hitTimeUp(){
+
+    if(
+        !gameRunning ||
+        roundFinished
+    ){
+
+        return;
+
+    }
+
+
+    roundFinished =
+        true;
+
+
+    clearTimeout(
+        roundTimer
+    );
+
+
+    cancelAnimationFrame(
+        timerAnimation
+    );
+
+
+    timerProgress.style.width =
+        "0%";
+
+
+    messageEl.textContent =
+        "⏰ Hết giờ!";
+
+
+    messageEl.style.color =
+        "#fef08a";
+
+
+    activeHoles.forEach(
+        index => {
+
+            hideMole(index);
+
+        }
+    );
+
+
+    waitForAudioThenNextRound();
+
+}
+
+
+/* =====================================================
+   WAIT AUDIO
+===================================================== */
+
+function waitForAudioThenNextRound(){
+
+    if(!gameRunning)
+        return;
+
+
+    if(
+        !wordAudio ||
+        wordAudio.ended
+    ){
+
+        goToNextRound();
+
+        return;
+
+    }
+
+
+    wordAudio.addEventListener(
+        "ended",
+        () => {
+
+            if(!gameRunning)
+                return;
+
+
+            goToNextRound();
+
+        },
+        {
+            once:true
+        }
+    );
+
+}
+
+
+/* =====================================================
+   NEXT ROUND
+===================================================== */
+
+function goToNextRound(){
+
+    if(!gameRunning)
+        return;
+
+
+    currentRound++;
+
+
+    if(
+        currentRound >=
+        TOTAL_ROUNDS
+    ){
+
+        endGame();
+
+        return;
+
+    }
+
+
+    setTimeout(
+        createRound,
+        250
+    );
+
+}
+
+
+/* =====================================================
+   HIT MOLE
+===================================================== */
+
+function hitMole(event){
+
+    if(!gameRunning)
+        return;
+
+
+    /*
+        Mỗi round chỉ được đập 1 lần.
+    */
+
+    if(roundFinished)
+        return;
+
+
+    const hole =
+        event.currentTarget;
+
+
+    if(
+        !hole.classList.contains(
+            "active"
+        )
+    ){
+
+        return;
+
+    }
+
+
+    if(
+        hole.dataset.hit ===
+        "true"
+    ){
+
+        return;
+
+    }
+
+
+    const index =
+        Number(
+            hole.dataset.index
+        );
+
+
+    const word =
+        holeWords[index];
+
+
+    hole.dataset.hit =
+        "true";
+
+
+    showHammer(
+        event.clientX,
+        event.clientY
+    );
+
+
+    /* =================================================
+       ĐÚNG
+    ================================================= */
+
+    if(
+        word === currentTarget
+    ){
+
+        roundFinished =
+            true;
+
+
+        score++;
+
+
+        updateScore();
+
+
+        messageEl.textContent =
+            "✅ Đúng rồi! +1";
+
+
+        messageEl.style.color =
+            "#bbf7d0";
+
+
+        playSound(
+            "correct"
+        );
+
+
+        clearTimeout(
+            roundTimer
+        );
+
+
+        cancelAnimationFrame(
+            timerAnimation
+        );
+
+
+        timerProgress.style.width =
+            "0%";
+
+
+        hole.classList.add(
+            "hit"
+        );
+
+
+        setTimeout(
+            () => {
+
+                for(
+                    let i = 0;
+                    i < 9;
+                    i++
+                ){
+
+                    hideMole(i);
+
+                }
+
+            },
+            180
+        );
+
+
+        waitForAudioThenNextRound();
+
+    }
+
+
+    /* =================================================
+       SAI
+    ================================================= */
+
+    else{
+
+        roundFinished =
+            true;
+
+
+        clearTimeout(
+            roundTimer
+        );
+
+
+        cancelAnimationFrame(
+            timerAnimation
+        );
+
+
+        timerProgress.style.width =
+            "0%";
+
+
+        messageEl.textContent =
+            "❌ Sai rồi!";
+
+
+        messageEl.style.color =
+            "#fecaca";
+
+
+        playSound(
+            "wrong"
+        );
+
+
+        hole.classList.add(
+            "hit"
+        );
+
+
+        setTimeout(
+            () => {
+
+                for(
+                    let i = 0;
+                    i < 9;
+                    i++
+                ){
+
+                    hideMole(i);
+
+                }
+
+            },
+            180
+        );
+
+
+        waitForAudioThenNextRound();
+
+    }
+
+}
+
+
+/* =====================================================
+   HAMMER
+===================================================== */
+
+function showHammer(
+    x,
+    y
+){
+
+    hammer.style.left =
+        `${x - 30}px`;
+
+
+    hammer.style.top =
+        `${y - 60}px`;
+
+
+    hammer.classList.remove(
+        "hit"
+    );
+
+
+    void hammer.offsetWidth;
+
+
+    hammer.classList.add(
+        "hit"
+    );
+
+
+    setTimeout(
+        () => {
+
+            hammer.classList.remove(
+                "hit"
+            );
+
+        },
+        250
+    );
+
+}
+
+
+/* =====================================================
+   SCORE
+===================================================== */
+
+function updateScore(){
+
+    scoreBoard.textContent =
+        `Điểm: ${score} / ${TOTAL_ROUNDS}`;
+
+}
+
+
+/* =====================================================
+   CORRECT / WRONG SOUND
+===================================================== */
+
+let audioContext =
+    null;
+
+
+function playSound(type){
+
+    try{
+
+        if(!audioContext){
+
+            audioContext =
+                new (
+                    window.AudioContext ||
+                    window.webkitAudioContext
+                )();
+
+        }
+
+
+        if(
+            audioContext.state ===
+            "suspended"
+        ){
+
+            audioContext.resume();
+
+        }
+
+
+        const osc =
+            audioContext.createOscillator();
+
+
+        const gain =
+            audioContext.createGain();
+
+
+        osc.connect(
+            gain
+        );
+
+
+        gain.connect(
+            audioContext.destination
+        );
+
+
+        if(
+            type === "correct"
+        ){
+
+            osc.type =
+                "sine";
+
+
+            osc.frequency.setValueAtTime(
+                700,
+                audioContext.currentTime
+            );
+
+
+            osc.frequency.exponentialRampToValueAtTime(
+                1100,
+                audioContext.currentTime + 0.12
+            );
+
+
+            gain.gain.setValueAtTime(
+                0.2,
+                audioContext.currentTime
+            );
+
+
+            gain.gain.exponentialRampToValueAtTime(
+                0.01,
+                audioContext.currentTime + 0.15
+            );
+
+
+            osc.start();
+
+
+            osc.stop(
+                audioContext.currentTime +
+                0.15
+            );
+
+        }
+
+
+        else{
+
+            osc.type =
+                "sawtooth";
+
+
+            osc.frequency.value =
+                150;
+
+
+            gain.gain.value =
+                0.15;
+
+
+            osc.start();
+
+
+            osc.stop(
+                audioContext.currentTime +
+                0.2
+            );
+
+        }
+
+    }
+
+    catch(e){}
+
+}
+
+
+/* =====================================================
+   START GAME
+===================================================== */
+
+startBtn.addEventListener(
+    "click",
+    () => {
+
+        if(
+            startBtn.disabled
+        ){
+
+            return;
+
+        }
+
+
+        const name =
+            nameInput.value.trim();
+
+
+        if(!name){
+
+            alert(
+                "Vui lòng nhập tên trước khi chơi!"
+            );
+
+            return;
+
+        }
+
+
+        studentName =
+            name;
+
+
+        remainingWords =
+            shuffle(
+                [...juniorword]
+            );
+
+
+        score =
+            0;
+
+
+        currentRound =
+            0;
+
+
+        currentTarget =
+            "";
+
+
+        gameRunning =
+            true;
+
+
+        roundFinished =
+            false;
+
+
+        if(wordAudio){
+
+            wordAudio.pause();
+
+            wordAudio.currentTime =
+                0;
+
+        }
+
+
+        updateScore();
+
+
+        welcomeScreen.style.display =
+            "none";
+
+
+        gameArea.style.display =
+            "block";
+
+
+        createBoard();
+
+
+        createRound();
+
+    }
+);
+
+
+/* =====================================================
+   END GAME
+===================================================== */
+
+function endGame(){
+
+    gameRunning =
+        false;
+
+
+    roundFinished =
+        true;
+
+
+    clearTimeout(
+        roundTimer
+    );
+
+
+    cancelAnimationFrame(
+        timerAnimation
+    );
+
+
+    if(wordAudio){
+
+        wordAudio.pause();
+
+        wordAudio.currentTime =
+            0;
+
+    }
+
+
+    for(
+        let i = 0;
+        i < 9;
+        i++
+    ){
+
+        hideMole(i);
+
+    }
+
+
+    gameArea.style.display =
+        "none";
+
+
+    endName.textContent =
+        studentName;
+
+
+    endScore.textContent =
+        `Điểm: ${score} / ${TOTAL_ROUNDS}`;
+
+
+    endScreen.style.display =
+        "block";
+
+
+    launchBalloons();
+
+}
+
+
+/* =====================================================
+   PLAY AGAIN
+===================================================== */
+
+playAgainBtn.addEventListener(
+    "click",
+    () => {
+
+        if(wordAudio){
+
+            wordAudio.pause();
+
+            wordAudio.currentTime =
+                0;
+
+        }
+
+
+        endScreen.style.display =
+            "none";
+
+
+        welcomeScreen.style.display =
+            "flex";
+
+
+        nameInput.value =
+            studentName;
+
+
+        gameBoard.innerHTML =
+            "";
+
+
+        remainingWords =
+            [];
+
+
+        /*
+            Không preload lại.
+
+            Ảnh + audio đã được preload.
+        */
+
+        loadingStatus.textContent =
+            `✅ Đã tải xong ${juniorword.length} hình ảnh + ${juniorword.length} âm thanh!`;
+
+
+        loadingProgress.style.width =
+            "100%";
+
+
+        startBtn.disabled =
+            false;
+
+
+        startBtn.textContent =
+            "🔨 Bắt đầu";
+
+    }
+);
+
+
+/* =====================================================
+   BALLOONS
+===================================================== */
+
+const canvas =
+    document.getElementById(
+        "balloonCanvas"
+    );
+
+
+const ctx =
+    canvas.getContext(
+        "2d"
+    );
+
+
+function resizeCanvas(){
+
+    canvas.width =
+        window.innerWidth;
+
+    canvas.height =
+        window.innerHeight;
+
+}
+
+
+resizeCanvas();
+
+
+window.addEventListener(
+    "resize",
+    resizeCanvas
+);
+
+
+let balloons = [];
+
+
+function createBalloon(){
+
+    balloons.push({
+
+        x:
+            Math.random() *
+            canvas.width,
+
+        y:
+            canvas.height + 50,
+
+        radius:
+            20 +
+            Math.random() * 15,
+
+        color:
+            `hsl(
+                ${Math.random()*360},
+                80%,
+                60%
+            )`,
+
+        speed:
+            1 +
+            Math.random() * 2
+
+    });
+
+}
+
+
+function animateBalloons(){
+
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+
+    balloons.forEach(
+        (b,i) => {
+
+            b.y -=
+                b.speed;
+
+
+            ctx.beginPath();
+
+
+            ctx.arc(
+                b.x,
+                b.y,
+                b.radius,
+                0,
+                2 * Math.PI
+            );
+
+
+            ctx.fillStyle =
+                b.color;
+
+
+            ctx.fill();
+
+
+            ctx.strokeStyle =
+                "#fff";
+
+
+            ctx.stroke();
+
+
+            if(
+                b.y + b.radius < 0
+            ){
+
+                balloons.splice(
+                    i,
+                    1
+                );
+
+            }
+
+        }
+    );
+
+
+    requestAnimationFrame(
+        animateBalloons
+    );
+
+}
+
+
+function launchBalloons(){
+
+    balloons = [];
+
+
+    const interval =
+        setInterval(
+            () => {
+
+                createBalloon();
+
+            },
+            150
+        );
+
+
+    setTimeout(
+        () => {
+
+            clearInterval(
+                interval
+            );
+
+        },
+        3000
+    );
+
+
+    animateBalloons();
+
+}
+
+
+/* =====================================================
+   DOM READY
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        welcomeScreen.style.display =
+            "flex";
+
+
+        /*
+            Bắt đầu preload:
+
+            - 14 ảnh
+            - 14 recording
+
+            KHÔNG preload background music.
+        */
+
+        preloadAllAssets();
+
+    }
+);
+
+</script>
+
+</body>
+</html>
